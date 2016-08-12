@@ -1,0 +1,94 @@
+%avós por parte de pai
+
+casado(abdias,benvinda).
+casado(benvinda,abdias).
+
+%avós por parte de mãe
+
+casado(xavier,zumira).
+casado(zumira,xavier).
+
+%meus pais
+
+casado(gercina,oscar).
+casado(oscar,gercina).
+
+% irmã trocou
+
+progenitor(gercina,adrianne).
+progenitor(gercina,alinne).
+progenitor(oscar,adrianne).
+progenitor(oscar,alinne).
+
+% pais do meu pai
+
+progenitor(benvinda,oscar).
+progenitor(abdias,oscar).
+
+%irmaos do meu pai
+
+progenitor(benvinda,rosa).
+progenitor(benvinda,joaquim).
+progenitor(abdias,rosa).
+progenitor(abdias,joaquim).
+
+%pais da minha mae
+
+progenitor(zumira,gercina).
+progenitor(xavier,gercina).
+
+%irmaos da minha mae
+
+progenitor(zumira,jessiane).
+progenitor(zumira,dusreis).
+progenitor(xavier,jessiane).
+progenitor(xavier,dusreis).
+
+%primos por parte de mae
+
+progenitor(jessiane,junior).
+progenitor(dusreis,michaele).
+
+%primos por parte de pai
+
+progenitor(rosa,celeste).
+progenitor(joaquim,ada).
+
+% declaracao de sexo
+
+feminino(benvinda).
+feminino(zumira).
+feminino(gercina).
+feminino(adrianne).
+feminino(alinne).
+feminino(rosa).
+feminino(jessiane).
+feminino(michaele).
+feminino(celeste).
+feminino(ada).
+
+masculino(abdias).
+masculino(xavier).
+masculino(oscar).
+masculino(joaquim).
+masculino(dusreis).
+masculino(junior).
+
+pai(X,Y):- masculino(X),progenitor(X,Y).
+mae(X,Y):- feminino(X),progenitor(X,Y).
+irmao(X,Y):- masculino(X),(pai(B,X),pai(B,Y)),(mae(A,X),mae(A,Y)),X\==Y.
+irma(X,Y):-(feminino(X)),(pai(B,X),pai(B,Y)),(mae(A,X),mae(A,Y)),X\==Y.
+
+% Caso houvesse casos de filhos de pais diferente na família o teste de
+% comparação para irmãos deveria ser feito considerando Pais OU mães
+% iguais.Dessa forma:
+%
+% irmao(X,Y):-
+% (masculino(X),pai(B,X),pai(B,Y));(masculino(X),mae(A,X),mae(A,Y)),X\==Y.
+%
+
+tio(X,Y):-(masculino(X),pai(A,Y),irmao(A,X));(masculino(X),mae(B,Y),irma(B,X)),X\==Y.
+tia(X,Y):-(feminino(X),pai(A,Y),irmao(A,X));(feminino(X),mae(B,Y),irma(B,X)),X\==Y.
+avô(X,Y):- X\==Y, masculino(X),progenitor(A,Y),progenitor(X,A).
+avó(X,Y):- X\==Y, feminino(X),(mae(A,Y),mae(X,A));(pai(B,Y),mae(X,B)).
+primo(X,Y):- X\==Y,(pai(B,Y),tio(B,X));(mae(A,Y),tia(A,X)).
